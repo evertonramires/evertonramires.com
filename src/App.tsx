@@ -1,4 +1,4 @@
-import { APITester } from "./components/APITester";
+import { Chat } from "./components/Chat";
 import "./index.css";
 
 import logo from "./logo.svg";
@@ -10,8 +10,8 @@ export function App() {
       <div className="flex justify-center items-center gap-8 mb-8">
         <img
           src={logo}
-          alt="Bun Logo"
-          className="h-24 p-6 transition-all duration-300 hover:drop-shadow-[0_0_2em_#646cffaa] scale-120"
+          alt="Ton Logo"
+          className="h-54 p-6 transition-all duration-300 hover:drop-shadow-[0_0_2em_#646cffaa] scale-120"
         />
       </div>
 
@@ -23,7 +23,7 @@ export function App() {
         </code>{" "}
         you want:
       </p>
-      <APITester />
+      <Chat />
     </div>
   );
 }

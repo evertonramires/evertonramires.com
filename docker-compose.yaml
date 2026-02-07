@@ -1,7 +1,7 @@
 services:
   bun:
     build: .
-    container_name: evertonramires.com
+    container_name: evertonramires
     restart: unless-stopped
 
     expose:

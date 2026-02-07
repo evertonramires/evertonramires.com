@@ -1,4 +1,4 @@
-import { APITester } from "./APITester";
+import { APITester } from "./components/APITester";
 import "./index.css";
 
 import logo from "./logo.svg";
@@ -13,16 +13,15 @@ export function App() {
           alt="Bun Logo"
           className="h-24 p-6 transition-all duration-300 hover:drop-shadow-[0_0_2em_#646cffaa] scale-120"
         />
-        <img
-          src={reactLogo}
-          alt="React Logo"
-          className="h-24 p-6 transition-all duration-300 hover:drop-shadow-[0_0_2em_#61dafbaa] animate-[spin_20s_linear_infinite]"
-        />
       </div>
 
-      <h1 className="text-5xl font-bold my-4 leading-tight">Bun + React</h1>
+      <h1 className="text-5xl font-bold my-4 leading-tight">Everton Ramires</h1>
       <p>
-        Edit <code className="bg-[#1a1a1a] px-2 py-1 rounded font-mono">src/App.tsx</code> and save to test HMR
+        Ask me{" "}
+        <code className="bg-[#1a1a1a] px-2 py-1 rounded font-mono">
+          whatever
+        </code>{" "}
+        you want:
       </p>
       <APITester />
     </div>

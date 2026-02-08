@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Install dependencies first for caching
 COPY package.json bun.lock* bunfig.toml* tsconfig.json* ./
-RUN bun install
+RUN bun install --production
 
 # Copy the rest of the source
 COPY . .

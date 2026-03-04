@@ -1,8 +1,7 @@
 import { Chat } from "./components/Chat";
 import "./index.css";
 
-import logo from "./logo.svg";
-import reactLogo from "./react.svg";
+import logo from "./selfie.png";
 
 export function App() {
   return (

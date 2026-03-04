@@ -13,6 +13,21 @@ client = genai.Client()
 
 app = FastAPI()
 
+# remove unsupported permissions-policy tokens that some proxies might inject
+from fastapi import Request
+
+@app.middleware("http")
+async def clean_permissions_policy(request: Request, call_next):
+    response = await call_next(request)
+    pp = response.headers.get("Permissions-Policy")
+    if pp:
+        parts = [p.strip() for p in pp.split(",") if "browsing-topics" not in p]
+        if parts:
+            response.headers["Permissions-Policy"] = ", ".join(parts)
+        else:
+            del response.headers["Permissions-Policy"]
+    return response
+
 raw_allowed = os.getenv("ALLOWED_ORIGINS")
 if raw_allowed:
     origins = [o for o in raw_allowed.split(",") if o]

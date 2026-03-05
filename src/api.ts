@@ -9,7 +9,7 @@ export type MessageResponse = {
 export async function sendMessage(
   data: MessageRequest
 ): Promise<MessageResponse> {
-  const apiUrl = import.meta.env?.VITE_API_BASE_URL || "http://api:8000";
+  const apiUrl = import.meta.env?.VITE_API_BASE_URL || "https://api.evertonramires.com";
   console.log(apiUrl);
   const res = await fetch(apiUrl, {
     method: "POST",

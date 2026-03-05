@@ -4,3 +4,4 @@ python-dotenv
 fastapi[standard]
 google-genai
 pydantic
+sqlalchemy

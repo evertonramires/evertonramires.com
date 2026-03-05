@@ -3,7 +3,9 @@ import colorlog
 import json
 import os
 import uvicorn
-
+from datetime import datetime
+from sqlalchemy import create_engine, Column, Integer, String, DateTime
+from sqlalchemy.orm import declarative_base, sessionmaker
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -29,6 +31,22 @@ log_level = os.getenv("LOG_LEVEL", "DEBUG").upper()
 logger.setLevel(getattr(logging, log_level, logging.DEBUG))
 
 load_dotenv()
+
+# SQLite setup
+DATABASE_URL = "sqlite:///./.chat_history.db"
+engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
+
+# Define database model
+class ConversationHistory(Base):
+    __tablename__ = "conversations"
+    id = Column(Integer, primary_key=True, index=True)
+    user_message = Column(String)
+    ai_response = Column(String)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+Base.metadata.create_all(bind=engine)
 
 client = genai.Client()
 
@@ -73,11 +91,19 @@ def message(request: MessageRequest):
         content = client.models.generate_content(
             model=os.getenv("GEMINI_MODEL"),
             contents=(
-                f"You are a candidate.You only answer questions about your resume. "
+                f"You are a candidate. You only answer questions about your resume. "
                 f"Your resume is: {json.dumps(resume)}. User says: {request.message}\nYou answer:"
             ),
         )        
         response = MessageResponse(message=content.text)
+        
+        # Store in database
+        db = SessionLocal()
+        db_entry = ConversationHistory(user_message=request.message, ai_response=content.text)
+        db.add(db_entry)
+        db.commit()
+        db.close()
+        
         return response.model_dump()
     except Exception as e:
         logger.error(e)

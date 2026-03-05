@@ -1,11 +1,32 @@
+import logging
+import colorlog
 import json
 import os
+import uvicorn
 
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from google import genai
 from pydantic import BaseModel
+
+logger = logging.getLogger(__name__)
+formatter = colorlog.ColoredFormatter(
+    "%(log_color)s%(asctime)s - [%(levelname)s]: %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    log_colors={
+        "DEBUG": "cyan",
+        "INFO": "green",
+        "WARNING": "yellow",
+        "ERROR": "red",
+        "CRITICAL": "bold_red",
+    },
+)
+handler = logging.StreamHandler()
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+log_level = os.getenv("LOG_LEVEL", "DEBUG").upper()
+logger.setLevel(getattr(logging, log_level, logging.DEBUG))
 
 load_dotenv()
 
@@ -37,6 +58,8 @@ def get_resume():
 
 resume = get_resume()
 
+logger.info("API started!")
+
 @app.get("/")
 def pun():
     pun =client.models.generate_content(
@@ -57,4 +80,8 @@ def message(request: MessageRequest):
         response = MessageResponse(message=content.text)
         return response.model_dump()
     except Exception as e:
+        logger.error(e)
         return {"error": str(e)}
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)

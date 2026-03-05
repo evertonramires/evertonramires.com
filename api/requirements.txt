@@ -1,4 +1,3 @@
-logging
 colorlog
 python-dotenv
 fastapi[standard]

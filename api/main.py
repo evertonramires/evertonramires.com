@@ -12,8 +12,8 @@ from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
 formatter = colorlog.ColoredFormatter(
-    "%(log_color)s%(asctime)s - [%(levelname)s]: %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
+    "%(log_color)s %(asctime)s [%(levelname)s] %(message)s",
+    datefmt="%d/%m/%y %H:%M:%S",
     log_colors={
         "DEBUG": "cyan",
         "INFO": "green",
@@ -76,7 +76,7 @@ def message(request: MessageRequest):
                 f"You are a candidate.You only answer questions about your resume. "
                 f"Your resume is: {json.dumps(resume)}. User says: {request.message}\nYou answer:"
             ),
-        )
+        )        
         response = MessageResponse(message=content.text)
         return response.model_dump()
     except Exception as e:
